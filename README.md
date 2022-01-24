@@ -1,7 +1,5 @@
 # internet-shop
 
-First django project.
-
 <b>Install</b>
 
 <pre>pip install -r requirements.txt</pre>
