@@ -1,16 +1,17 @@
-import json
-
 from django.shortcuts import render
 from django.utils import timezone
 
+from .models import Product, ProductCategory
+
 MENU_LINKS = [
     {"url": "main", "name": "домой"},
-    {"url": "products", "name": "продукты"},
+    {"url": "mainapp:products", "name": "продукты"},
     {"url": "contact", "name": "контакты"},
 ]
 
 
 def main(reqest):
+    products = Product.objects.all()[:4]
     return render(
         reqest,
         "mainapp/index.html",
@@ -18,35 +19,13 @@ def main(reqest):
             "current_year": timezone.now().year,
             "title": "Главная",
             "menu_links": MENU_LINKS,
+            "products": products,
         },
     )
 
 
 def products(reqest):
-
-    # Вариант с импортом данных из файла
-    with open("./products.json", "r") as file:
-        products = json.load(file)
-
-    # Вариант простого списка
-    # products = [
-    #     {
-    #         'name': 'Люстра',
-    #         'description': 'Цветная люстра',
-    #         'image': 'img/product-11.jpg'
-    #     },
-    #     {
-    #         'name': 'Cтул',
-    #         'description': 'Удобный стул',
-    #         'image': 'img/product-21.jpg'
-    #     },
-    #     {
-    #         'name': 'Лампа',
-    #         'description': 'Уютная лампа',
-    #         'image': 'img/product-31.jpg'
-    #     },
-    # ]
-
+    catigories = ProductCategory.objects.all()
     return render(
         reqest,
         "mainapp/products.html",
@@ -54,8 +33,13 @@ def products(reqest):
             "title": "Продукты",
             "menu_links": MENU_LINKS,
             "products": products,
+            "catigories": catigories,
         },
     )
+
+
+def category(reqest, pk):
+    return products(reqest)
 
 
 def contact(reqest):
