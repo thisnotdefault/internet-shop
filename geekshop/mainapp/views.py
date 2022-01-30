@@ -5,12 +5,12 @@ from .models import Product, ProductCategory
 
 MENU_LINKS = [
     {"url": "main", "name": "домой"},
-    {"url": "mainapp:products", "name": "продукты"},
+    {"url": "products:main", "name": "продукты"},
     {"url": "contact", "name": "контакты"},
 ]
 
 
-def main(reqest):
+def index(reqest):
     products = Product.objects.all()[:4]
     return render(
         reqest,
