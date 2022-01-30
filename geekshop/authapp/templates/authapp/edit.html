@@ -1,0 +1,15 @@
+{% extends 'authapp/base.html'%}
+
+{% block content %}
+  {% if user.avatar %}
+    <img src="{{ user.avatar.url }}"/>
+  {% endif %}
+  <form method="post" url="{% url "auth:edit" %}" enctype="multipart/form-data">
+      {% csrf_token %}
+        {{ form.as_p }}
+        <br>
+        <div align="center">
+          <input type="submit"class="btn btn-primary btn-lg active" value="Сохранить">
+        </div>
+    </form>
+{% endblock %}
