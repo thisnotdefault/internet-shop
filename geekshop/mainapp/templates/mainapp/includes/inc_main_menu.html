@@ -3,7 +3,7 @@
     {% for link in menu_links %}
     <li>
         <a href="{% url link.url %}"
-            {% if request.resolver_match.url_name == link.url %}
+            {% if request.resolver_match.view_name in link.active %}
                 class="active"
             {% endif %}
         >
@@ -15,10 +15,18 @@
     {% if user.is_authenticated %}
     <li>
         <a href="{% url 'auth:edit' %}">
-            {{ user.first_name|default:'Пользователь' }}          
+            <i class="fa fa-user">   {{ user.first_name|default:'Пользователь' }}</i>          
         </a>
     </li>
-    {% endif %}  
+    {% endif %}
+    {% if user.is_authenticated %}
+    <li>
+        <a href="{% url 'basket:view' %}">
+            <i class="fa fa-shopping-basket fa-1x"></i>
+            {{ user.basket.total_cost }} руб. {% if user.basket.total_quantity %} ({{ user.basket.total_quantity }}) {%endif%}
+        </a>
+    </li>
+    {% endif %} 
     <li>
         {% if user.is_authenticated %}
         <a href="{% url 'auth:logout' %}">выйти</a>

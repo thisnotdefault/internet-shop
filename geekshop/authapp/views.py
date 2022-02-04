@@ -60,10 +60,11 @@ def edit(request):
         )
         if edit_form.is_valid():
             edit_form.save()
-            return HttpResponseRedirect(reverse("auth:edit"))
+            return HttpResponseRedirect(reverse("main"))
     else:
         edit_form = ShopUserEditForm(instance=request.user)
-
+        
+    
     return render(
         request,
         "authapp/edit.html",
