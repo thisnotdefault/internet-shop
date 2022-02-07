@@ -1,4 +1,7 @@
 from django.contrib import auth
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
 from django.shortcuts import HttpResponseRedirect, render
 from django.urls import reverse
 
@@ -33,6 +36,8 @@ def login(request):
             user = auth.authenticate(request.user, username=username, password=password)
             if user and user.is_active:
                 auth.login(request, user)
+                if 'next' in request.GET.keys():
+                    return HttpResponseRedirect(request.GET['next'])
                 return HttpResponseRedirect(reverse("main"))
     else:
         login_form = ShopUserLoginForm()
@@ -51,6 +56,7 @@ def logout(request):
     return HttpResponseRedirect(reverse("main"))
 
 
+@login_required
 def edit(request):
     if request.method == "POST":
         edit_form = ShopUserEditForm(
@@ -73,3 +79,26 @@ def edit(request):
             "form": edit_form,
         },
     )
+
+
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        password_change_form = PasswordChangeForm(request.user, request.POST)
+        if password_change_form.is_valid():
+            user = password_change_form.save()
+            update_session_auth_hash(request, user)  
+            return HttpResponseRedirect(reverse("main"))
+    else:
+        password_change_form = PasswordChangeForm(request.user)
+    return render(
+        request,
+        "authapp/change_password.html",
+        context={
+            "title": "Смена пароля",
+            "password_change_form": password_change_form,
+        },
+    )
+        
+    
+    
