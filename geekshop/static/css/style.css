@@ -1076,3 +1076,13 @@ td:first-child {
 .related-products a:hover .text{
 	display: block;
 }
+
+.user_record.not_active {
+	opacity: 0.8;
+	color: lightgray;
+}
+
+.category_record.not_active {
+	opacity: 0.8;
+	color: lightgray;
+}
