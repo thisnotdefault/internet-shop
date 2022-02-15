@@ -9,7 +9,11 @@ from .models import Product, ProductCategory
 
 MENU_LINKS = [
     {"url": "main", "active": ["main"], "name": "домой"},
-    {"url": "products:all", "active": ["products:all", "products:category"], "name": "продукты"},
+    {
+        "url": "products:all",
+        "active": ["products:all", "products:category"],
+        "name": "продукты",
+    },
     {"url": "contact", "active": ["contact"], "name": "контакты"},
 ]
 
@@ -53,7 +57,7 @@ def category(reqest, category_id, page=1):
     categories = ProductCategory.objects.all()
     category = get_object_or_404(ProductCategory, pk=category_id)
     products = Product.objects.filter(category=category)
-    
+
     paginator = Paginator(products, 3)
     try:
         products_page = paginator.page(page)
