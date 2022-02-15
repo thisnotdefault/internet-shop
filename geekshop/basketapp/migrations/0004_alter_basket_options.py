@@ -6,12 +6,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('basketapp', '0003_auto_20220203_2209'),
+        ("basketapp", "0003_auto_20220203_2209"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='basket',
-            options={'ordering': ('id',)},
+            name="basket",
+            options={"ordering": ("id",)},
         ),
     ]

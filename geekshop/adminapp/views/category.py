@@ -1,20 +1,25 @@
 from django.http.response import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
+
+from adminapp.forms import ProductCategoryAdminForm
+from adminapp.utils import superuser_required
 from authapp.models import ShopUser
 from mainapp.models import ProductCategory
-from adminapp.forms import ProductCategoryAdminForm 
-from adminapp.utils import superuser_required
 
 
 @superuser_required
 def categories(request):
-    categories = ProductCategory.objects.all().order_by('id')
+    categories = ProductCategory.objects.all().order_by("id")
 
-    return render(request, 'adminapp/category/categories.html', context={
-        'title': 'Категории',
-        'objects': categories,
-    })
+    return render(
+        request,
+        "adminapp/category/categories.html",
+        context={
+            "title": "Категории",
+            "objects": categories,
+        },
+    )
 
 
 @superuser_required
@@ -26,8 +31,7 @@ def category_create(request):
             return HttpResponseRedirect(reverse("admin:categories"))
     else:
         form = ProductCategoryAdminForm()
-        
-    
+
     return render(
         request,
         "adminapp/category/edit.html",
@@ -49,8 +53,7 @@ def category_update(request, pk):
             return HttpResponseRedirect(reverse("admin:categories"))
     else:
         form = ProductCategoryAdminForm(instance=category)
-        
-    
+
     return render(
         request,
         "adminapp/category/edit.html",
@@ -62,16 +65,16 @@ def category_update(request, pk):
 
 
 @superuser_required
-def category_delete(request,pk):
-    title = 'Удаление категории'
-    
+def category_delete(request, pk):
+    title = "Удаление категории"
+
     category = get_object_or_404(ProductCategory, pk=pk)
-    
-    if request.method == 'POST':
+
+    if request.method == "POST":
         category.is_active = False
         category.save()
-        return HttpResponseRedirect(reverse('admin:categories'))
+        return HttpResponseRedirect(reverse("admin:categories"))
 
-    content = {'title': title, 'category_to_delete': category}
-    
-    return render(request, 'adminapp/category/delete.html', content)
+    content = {"title": title, "category_to_delete": category}
+
+    return render(request, "adminapp/category/delete.html", content)

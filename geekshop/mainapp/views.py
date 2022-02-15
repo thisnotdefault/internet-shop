@@ -1,6 +1,7 @@
 import random
 
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import EmptyPage, Paginator
 from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
 
@@ -8,7 +9,11 @@ from .models import Product, ProductCategory
 
 MENU_LINKS = [
     {"url": "main", "active": ["main"], "name": "домой"},
-    {"url": "products:all", "active": ["products:all", "products:category"], "name": "продукты"},
+    {
+        "url": "products:all",
+        "active": ["products:all", "products:category"],
+        "name": "продукты",
+    },
     {"url": "contact", "active": ["contact"], "name": "контакты"},
 ]
 
@@ -48,18 +53,28 @@ def products(reqest):
     )
 
 
-def category(reqest, category_id):
+def category(reqest, category_id, page=1):
     categories = ProductCategory.objects.all()
     category = get_object_or_404(ProductCategory, pk=category_id)
     products = Product.objects.filter(category=category)
+
+    paginator = Paginator(products, 3)
+    try:
+        products_page = paginator.page(page)
+    except:
+        products_page = paginator.page(paginator.num_pages)
+
     return render(
         reqest,
         "mainapp/products.html",
         context={
             "title": "Продукты",
             "menu_links": MENU_LINKS,
-            "products": products[:4],
+            "products": products_page,
+            "paginator": paginator,
+            "page": products_page,
             "categories": categories,
+            "category": category,
             "hot_product": get_hot_product(products),
         },
     )

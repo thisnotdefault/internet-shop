@@ -36,8 +36,8 @@ def login(request):
             user = auth.authenticate(request.user, username=username, password=password)
             if user and user.is_active:
                 auth.login(request, user)
-                if 'next' in request.GET.keys():
-                    return HttpResponseRedirect(request.GET['next'])
+                if "next" in request.GET.keys():
+                    return HttpResponseRedirect(request.GET["next"])
                 return HttpResponseRedirect(reverse("main"))
     else:
         login_form = ShopUserLoginForm()
@@ -69,8 +69,7 @@ def edit(request):
             return HttpResponseRedirect(reverse("main"))
     else:
         edit_form = ShopUserEditForm(instance=request.user)
-        
-    
+
     return render(
         request,
         "authapp/edit.html",
@@ -83,11 +82,11 @@ def edit(request):
 
 @login_required
 def change_password(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         password_change_form = PasswordChangeForm(request.user, request.POST)
         if password_change_form.is_valid():
             user = password_change_form.save()
-            update_session_auth_hash(request, user)  
+            update_session_auth_hash(request, user)
             return HttpResponseRedirect(reverse("main"))
     else:
         password_change_form = PasswordChangeForm(request.user)
@@ -99,6 +98,3 @@ def change_password(request):
             "password_change_form": password_change_form,
         },
     )
-        
-    
-    

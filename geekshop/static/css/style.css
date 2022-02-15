@@ -1086,3 +1086,8 @@ td:first-child {
 	opacity: 0.8;
 	color: lightgray;
 }
+
+.product_record.not_active {
+	opacity: 0.8;
+	color: lightgray;
+}
