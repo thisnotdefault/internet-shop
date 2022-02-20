@@ -1,18 +1,11 @@
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse
 from django.utils.decorators import method_decorator
-from django.views.generic import (
-    CreateView,
-    DeleteView,
-    DetailView,
-    ListView,
-    UpdateView,
-)
+from django.views.generic import CreateView, DeleteView, DetailView, UpdateView
 
 from adminapp.forms import AdminProductEditForm
 from adminapp.utils import superuser_required
-from authapp.models import ShopUser
 from mainapp.models import Product, ProductCategory
 
 

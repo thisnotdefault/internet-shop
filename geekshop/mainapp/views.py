@@ -1,21 +1,10 @@
 import random
 
-from django.contrib.auth.decorators import login_required
 from django.core.paginator import EmptyPage, Paginator
 from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
 
 from .models import Product, ProductCategory
-
-MENU_LINKS = [
-    {"url": "main", "active": ["main"], "name": "домой"},
-    {
-        "url": "products:all",
-        "active": ["products:all", "products:category"],
-        "name": "продукты",
-    },
-    {"url": "contact", "active": ["contact"], "name": "контакты"},
-]
 
 
 def index(reqest):
@@ -26,7 +15,6 @@ def index(reqest):
         context={
             "current_year": timezone.now().year,
             "title": "Главная",
-            "menu_links": MENU_LINKS,
             "products": products,
         },
     )
@@ -45,7 +33,6 @@ def products(reqest):
         "mainapp/products.html",
         context={
             "title": "Продукты",
-            "menu_links": MENU_LINKS,
             "products": products.exclude(pk=hot_product.pk)[:4],
             "categories": categories,
             "hot_product": hot_product,
@@ -69,7 +56,6 @@ def category(reqest, category_id, page=1):
         "mainapp/products.html",
         context={
             "title": "Продукты",
-            "menu_links": MENU_LINKS,
             "products": products_page,
             "paginator": paginator,
             "page": products_page,
@@ -88,7 +74,6 @@ def product(reqest, product_id):
         "mainapp/product.html",
         context={
             "title": "Продукты",
-            "menu_links": MENU_LINKS,
             "product": product,
             "categories": categories,
         },
@@ -101,6 +86,5 @@ def contact(reqest):
         "mainapp/contact.html",
         context={
             "title": "Контакты",
-            "menu_links": MENU_LINKS,
         },
     )
