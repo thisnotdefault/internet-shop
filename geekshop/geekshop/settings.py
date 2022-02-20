@@ -67,6 +67,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "mainapp.context_processors.menu_links",
             ],
         },
     },
@@ -108,7 +109,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = "ru-us"
+LANGUAGE_CODE = "ru-ru"
 
 TIME_ZONE = "UTC"
 
@@ -144,3 +145,19 @@ MEDIA_ROOT = BASE_DIR / "media"
 AUTH_USER_MODEL = "authapp.ShopUser"
 
 LOGIN_URL = "auth:login"
+
+
+# Mail settings
+DOMAIN_NAME = "http://localhost:8000"
+
+# For work mail
+# EMAIL_HOST = "localhost"
+# EMAIL_PORT = "2025"
+# EMAIL_HOST_USER = None
+# EMAIL_HOST_PASSWORD = None
+# EMAIL_USE_SSL = False
+
+
+# For test
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH = "tmp/email-messages/"

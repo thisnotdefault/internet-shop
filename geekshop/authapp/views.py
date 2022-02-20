@@ -5,15 +5,42 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.shortcuts import HttpResponseRedirect, render
 from django.urls import reverse
 
+from authapp.models import ShopUser
+
 from .forms import ShopUserEditForm, ShopUserLoginForm, ShopUserRegisterForm
+from .utils import send_verify_mail
+
+
+def verify(request, email, activation_key):
+    try:
+        user = ShopUser.objects.get(email=email)
+        if (
+            user.activation_key == activation_key
+            and not user.is_activation_key_expired()
+        ):
+            user.is_active = True
+            user.save()
+            auth.login(request, user)
+            return render(request, "authapp/verification.html")
+        else:
+            print(f"error activation user: {user}")
+            return render(request, "authapp/verification.html")
+    except Exception as e:
+        print(f"error activation user : {e.args}")
+        return HttpResponseRedirect(reverse("main"))
 
 
 def register(request):
     if request.method == "POST":
         register_form = ShopUserRegisterForm(request.POST, request.FILES)
         if register_form.is_valid():
-            register_form.save()
-            return HttpResponseRedirect(reverse("auth:login"))
+            user = register_form.save()
+            if send_verify_mail(user):
+                print("сообщение подтверждения отправлено")
+                return HttpResponseRedirect(reverse("auth:login"))
+            else:
+                print("ошибки отправки сообщения")
+                return HttpResponseRedirect(reverse("auth:login"))
     else:
         register_form = ShopUserRegisterForm()
     return render(

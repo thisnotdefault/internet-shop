@@ -4,7 +4,6 @@ from django.urls import reverse
 
 from adminapp.forms import ProductCategoryAdminForm
 from adminapp.utils import superuser_required
-from authapp.models import ShopUser
 from mainapp.models import ProductCategory
 
 
